@@ -1,11 +1,13 @@
-import socket, threading, re
+import socket
+import threading
+import re
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serverRunning = True
 ip = str(socket.gethostbyname(socket.gethostname()))
 port = 1234
 
-client = {}
+clients = {}
 clientPublicKeys = {}
 
 s.bind((ip, port))
@@ -20,19 +22,19 @@ def handleClient(client, uname):
             msg = client.recv(1024).decode('ascii')
             found = False
             if '**quit' in msg:
-                response = 'Goodbye!\U0001F612'
+                response = 'Goodbye!'
                 client.send(response.encode('ascii'))
                 clients.pop(uname)
-                print(uname + 'logout from server\U0001F612')
+                print(uname + ' logout dari server')
                 clientConnected = False
             elif '**get' in msg:
                 for i in clients:
-                   if uname!=i:
+                    if uname!=i:
                         response = '!!' + clientPublicKeys[i]
                         client.send(response.encode('ascii'))
             elif '@' in msg:
                 for i in clients:
-                   if uname!=i:
+                    if uname!=i:
                         response = '@' + msg
                         clients.get(i).send(msg.encode('ascii'))
             else:
@@ -59,6 +61,7 @@ def handleClient(client, uname):
             clients.pop(uname)
             print(uname + ' logout dari server')
             clientConnected = False
+
 
 while serverRunning:
     client, address = s.accept()
