@@ -12,7 +12,7 @@ clientPublicKeys = {}
 
 s.bind((ip, port))
 s.listen()
-print('IP Address Server: %s'%ip)
+print('IP Address Server: %s 🌐' % ip)
 
 def handleClient(client, uname):
     clientConnected = True
@@ -22,10 +22,10 @@ def handleClient(client, uname):
             msg = client.recv(1024).decode('ascii')
             found = False
             if '**quit' in msg:
-                response = 'Goodbye!'
+                response = 'Goodbye! 👋'
                 client.send(response.encode('ascii'))
                 clients.pop(uname)
-                print(uname + ' logout dari server')
+                print(str(uname) + ' logout dari server 👋')
                 clientConnected = False
             elif '**get' in msg:
                 for i in clients:
@@ -56,18 +56,18 @@ def handleClient(client, uname):
                         clients.get(name).send(msg.encode('ascii'))
                         found = True
                 if(not found):
-                    client.send('Gagal mengirim pesan, tidak ada lawan bicara.'.encode('ascii'))
+                    client.send('Gagal mengirim pesan, tidak ada lawan bicara. ❌'.encode('utf-8'))
         except:
             clients.pop(uname)
-            print(uname + ' logout dari server')
+            print(uname + ' logout dari server 🚪')
             clientConnected = False
 
 
 while serverRunning:
     client, address = s.accept()
     uname, publickeyclient = [str(i) for i in client.recv(1024).decode('ascii').split('\n')]
-    print(str(uname),'connected to the server with public key',str(publickeyclient))
-    client.send('\nHalo! Mulai chat dengan lawan bicaramu!\n'.encode('ascii'))
+    print(str(uname), 'connected to the server with public key', str(publickeyclient), '🔐')
+    client.send('\nHalo! Mulai chat dengan lawan bicaramu! 💬\n'.encode('utf-8'))
 
     if(client not in clients):
         clients[uname] = client
