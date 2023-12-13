@@ -1,8 +1,11 @@
 import random
 
+"""
+fungsi untuk memeriksa apakah suatu bilangan adalah bilangan prima.
+"""
 def is_prime(num, test_count):
     if num == 1:
-        return False
+        return False # jika num = 1
     if test_count >= num:
         test_count = num - 1
     for x in range(test_count):
@@ -18,6 +21,8 @@ def generate_big_prime(n):
         if is_prime(p, 1000):
             return p
 
+
+#  Euclidean (fpb)
 def gcd(a, b):
     while b != 0:
         a, b = b, a % b
@@ -38,6 +43,9 @@ def multiplicative_inverse(e, n):
         return n + x
     return x
 
+"""
+generate key dengan panjang 8 bit
+"""
 def generate_keypair(p=173, q=149):
     if p == q:
         raise ValueError('p and q cannot be equal')

@@ -5,14 +5,14 @@ import re
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serverRunning = True
 ip = str(socket.gethostbyname(socket.gethostname()))
-port = 1234
+port = 1212
 
 clients = {}
 clientPublicKeys = {}
 
 s.bind((ip, port))
 s.listen()
-print('IP Address Server: %s 🌐' % ip)
+print('IP Address Server: %s'%ip)
 
 def handleClient(client, uname):
     clientConnected = True
@@ -22,22 +22,32 @@ def handleClient(client, uname):
             msg = client.recv(1024).decode('ascii')
             found = False
             if '**quit' in msg:
-                response = 'Goodbye! 👋'
+                response = 'Goodbye!' # jika client menjalankan command **quit
                 client.send(response.encode('ascii'))
                 clients.pop(uname)
-                print(str(uname) + ' logout dari server 👋')
+                print(uname + ' logout dari server')
                 clientConnected = False
+                """
+                server mengirimkan kunci publik dari klien lain kepada klien.
+                """
             elif '**get' in msg:
                 for i in clients:
                     if uname!=i:
                         response = '!!' + clientPublicKeys[i]
                         client.send(response.encode('ascii'))
+                """
+                server mengirimkan pesan tersebut kepada semua klien lainnya.
+                """
             elif '@' in msg:
                 for i in clients:
                     if uname!=i:
                         response = '@' + msg
                         clients.get(i).send(msg.encode('ascii'))
             else:
+                """
+                Jika pesan tidak mengandung perintah khusus, server mengenkripsi dan mengirimkan pesan kepada klien lainnya menggunakan DES.
+                Pesan tersebut juga dicetak di server tapi terencode.
+                """
                 for name in keys:
                     if(uname!=name):
                         temp=msg
@@ -56,18 +66,20 @@ def handleClient(client, uname):
                         clients.get(name).send(msg.encode('ascii'))
                         found = True
                 if(not found):
-                    client.send('Gagal mengirim pesan, tidak ada lawan bicara. ❌'.encode('utf-8'))
+                    client.send('Gagal mengirim pesan, tidak ada lawan bicara.'.encode('ascii'))
         except:
             clients.pop(uname)
-            print(uname + ' logout dari server 🚪')
+            print(uname + ' logout dari server')
             clientConnected = False
 
-
+"""
+menyimpan informasi dari client (nama dan pub key)
+"""
 while serverRunning:
     client, address = s.accept()
     uname, publickeyclient = [str(i) for i in client.recv(1024).decode('ascii').split('\n')]
-    print(str(uname), 'connected to the server with public key', str(publickeyclient), '🔐')
-    client.send('\nHalo! Mulai chat dengan lawan bicaramu! 💬\n'.encode('utf-8'))
+    print(str(uname),'connected to the server with public key',str(publickeyclient))
+    client.send('\nHalo! Mulai chat dengan lawan bicaramu!\n'.encode('ascii'))
 
     if(client not in clients):
         clients[uname] = client

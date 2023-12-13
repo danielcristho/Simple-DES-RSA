@@ -1,48 +1,51 @@
 import re
 
 plainIP = [
-		58, 50, 42, 34, 26, 18, 10, 2,
-		60, 52, 44, 36, 28, 20, 12, 4,
-		62, 54, 46, 38, 30, 22, 14, 6,
-		64, 56, 48, 40, 32, 24, 16, 8,
-		57, 49, 41, 33, 25, 17,  9, 1,
-		59, 51, 43, 35, 27, 19, 11, 3,
-		61, 53, 45, 37, 29, 21, 13, 5,
-		63, 55, 47, 39, 31, 23, 15, 7
-		]
+	    58, 50, 42, 34, 26, 18, 10, 2,
+        60, 52, 44, 36, 28, 20, 12, 4,
+        62, 54, 46, 38, 30, 22, 14, 6,
+        64, 56, 48, 40, 32, 24, 16, 8,
+        57, 49, 41, 33, 25, 17,  9, 1,
+        59, 51, 43, 35, 27, 19, 11, 3,
+        61, 53, 45, 37, 29, 21, 13, 5,
+        63, 55, 47, 39, 31, 23, 15, 7
+]
 
 keyP1 = [
-		57, 49, 41, 33, 25, 17,  9,
-		1, 58, 50, 42, 34, 26, 18,
-		10,  2, 59, 51, 43, 35, 27,
-		19, 11,  3, 60, 52, 44, 36,
-		63, 55, 47, 39, 31, 23, 15,
-		7, 62, 54, 46, 38, 30, 22,
-		14,  6, 61, 53, 45, 37, 29,
-		21, 13,  5, 28, 20, 12,  4
-		]
+	    57, 49, 41, 33, 25, 17,  9,
+        1, 58, 50, 42, 34, 26, 18,
+        10,  2, 59, 51, 43, 35, 27,
+        19, 11,  3, 60, 52, 44, 36,
+        63, 55, 47, 39, 31, 23, 15,
+        7, 62, 54, 46, 38, 30, 22,
+        14,  6, 61, 53, 45, 37, 29,
+        21, 13,  5, 28, 20, 12,  4
+]
 
 keyP2 = [
-		14, 17, 11, 24,  1,  5,  3, 28,
-		15,  6, 21, 10, 23, 19, 12,  4,
-		26,  8, 16,  7, 27, 20, 13,  2,
-		41, 52, 31, 37, 47, 55, 30, 40,
-		51, 45, 33, 48, 44, 49, 39, 56,
-		34, 53, 46, 42, 50, 36, 29, 32
-		]
+	    14, 17, 11, 24,  1,  5,  3, 28,
+        15,  6, 21, 10, 23, 19, 12,  4,
+        26,  8, 16,  7, 27, 20, 13,  2,
+        41, 52, 31, 37, 47, 55, 30, 40,
+        51, 45, 33, 48, 44, 49, 39, 56,
+        34, 53, 46, 42, 50, 36, 29, 32
+]
 
+"""
+Menentukan jumlah pergeseran bit ke kiri pada setiap putaran dalam proses pembuatan kunci,
+"""
 shift = [1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1]
 
 plainExpands = [
-			32, 1, 2, 3, 4, 5,
-			4,  5,  6,  7,  8,  9,
-			8,  9,  10, 11, 12, 13,
-			12, 13, 14, 15, 16, 17,
-			16, 17, 18, 19, 20, 21,
-			20, 21, 22, 23, 24, 25,
-			24, 25, 26, 27, 28, 29,
-			28, 29, 30, 31, 32,  1
-			]
+        32,  1,  2,  3,  4,  5,
+        4,  5,  6,  7,  8,  9,
+        8,  9, 10, 11, 12, 13,
+        12, 13, 14, 15, 16, 17,
+        16, 17, 18, 19, 20, 21,
+        20, 21, 22, 23, 24, 25,
+        24, 25, 26, 27, 28, 29,
+        28, 29, 30, 31, 32,  1
+]
 
 sBox = [
 	[[14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7],
@@ -93,44 +96,66 @@ sBox = [
 	[2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11],
 	]]
 
-plainP2 = [16,  7, 20, 21, 29, 12, 28, 17,
-		1, 15, 23, 26,  5, 18, 31, 10,
-		2,  8, 24, 14, 32, 27,  3,  9,
-		19, 13, 30,  6, 22, 11,  4, 25]
+"""
+permutasi terakhir dari fiestel function
+"""
+plainP2 = [
+	    16,  7, 20, 21, 29, 12, 28, 17,
+        1, 15, 23, 26,  5, 18, 31, 10,
+        2,  8, 24, 14, 32, 27,  3,  9,
+        19, 13, 30,  6, 22, 11,  4, 25
+]
 
+"""
+final permutasi secara keseluruhan
+"""
 finalPermut = [
-			40, 8, 48, 16, 56, 24, 64, 32,
-			39, 7, 47, 15, 55, 23, 63, 31,
-			38, 6, 46, 14, 54, 22, 62, 30,
-			37, 5, 45, 13, 53, 21, 61, 29,
-			36, 4, 44, 12, 52, 20, 60, 28,
-			35, 3, 43, 11, 51, 19, 59, 27,
-			34, 2, 42, 10, 50, 18, 58, 26,
-			33, 1, 41,  9, 49, 17, 57, 25
-			]
+	    40, 8, 48, 16, 56, 24, 64, 32,
+        39, 7, 47, 15, 55, 23, 63, 31,
+        38, 6, 46, 14, 54, 22, 62, 30,
+        37, 5, 45, 13, 53, 21, 61, 29,
+        36, 4, 44, 12, 52, 20, 60, 28,
+        35, 3, 43, 11, 51, 19, 59, 27,
+        34, 2, 42, 10, 50, 18, 58, 26,
+        33, 1, 41,  9, 49, 17, 57, 25
+]
 
+"""
+convert string to ascii
+"""
 def toAscii(pure):
 	asciiPure = []
 	y=0
 	if len(pure)<8:
 		y=len(pure)
+		"""
+		jika panjang string kurang dari 8 karakter,
+		maka perlu disisipkan nilai ASCII dari setiap karakter ke dalam list 'asciiPure'
+		"""
 		for x in range(y):
 			asciiPure.insert(x, int(ord(pure[x])))
 			asciiPure[x]='{0:08b}'.format(asciiPure[x])
 			for x in range(y,8):
-				asciiPure.insert(x, '00000000')
+				# Melengkapi list 'asciiPure' dengan nilai 0 untuk karakter yang kurang dari 8
+				asciiPure.insert(x,'00000000')
 	else:
-			for x in range(8):
-				asciiPure.insert(x, int(ord(pure[x])))
-				asciiPure[x]='{0:08b}'.format(asciiPure[x])
+		"""
+		Jika panjang string >= 8 karakter
+		"""
+		for x in range(8):
+			asciiPure.insert(x, int(ord(pure[x])))
+			asciiPure[x]='{0:08b}'.format(asciiPure[x])
 	return asciiPure
 
 def toBinary(pure):
 	binaryPure = []
+	"""
+	iterasi melalui x dan y (baris&kolom)
+	"""
 	for x in range(len(pure)):
-		for y in range(len(pure)):
+		for y in range(len(pure[x])):
 			binaryPure.append(pure[x][y])
-		return binaryPure
+	return binaryPure
 
 def toPermut(pure, permutation):
 	permutedPure = []
@@ -138,14 +163,18 @@ def toPermut(pure, permutation):
 		permutedPure.append(pure[permutation[x]-1])
 	return permutedPure
 
+"""
+membagi list 'pure' menjadi dua bagian
+"""
 def toLeftRight(pure):
 	left = []
 	right = []
 	for x in range(int(len(pure)/2)):
 		left.append(pure[x])
-	for x in range(int(len(pure)/2),len(pure)):
+	for x in range(int(len(pure)/2),len(pure)): # mengisi bagian 'right' dengan elemen-elemen yang tersisa dari array pure.
 		right.append(pure[x])
 	return {'left':left, 'right':right}
+
 
 def toShift(pure, k):
 	shifted = []
@@ -165,6 +194,7 @@ def toCombine(left, right):
 		combined.append(left[x])
 	for x in range(len(right)):
 		combined.append(right[x])
+	return combined
 
 def toXor(plain, key):
 	xor = []
@@ -177,11 +207,10 @@ def toXor(plain, key):
 	return xor
 
 def toSbox(pure):
-	box = toSplit(pure, 6)
+	box = toSplit(pure,6)
 	row = []
-	col	= []
-
-	for	x in range(len(box)):
+	col = []
+	for x in range(len(box)):
 		tempRow = []
 		tempCol = []
 		for y in range(6):
@@ -216,7 +245,6 @@ def toSplit(pure,bit):
 	return boxes
 
 K = []
-
 def program(idx):
 	keyPart['left'] = toShift(keyPart['left'], shift[idx])
 	keyPart['right'] = toShift(keyPart['right'], shift[idx])
@@ -269,67 +297,50 @@ def toDecrypt(plain, keyClient):
 	return temp2
 
 def toEncrypt2(plain, key):
-    asciiPlain = toAscii(plain)
-    binaryPlain = toBinary(asciiPlain)
-
-    # key = "papamama"
-    asciiKey = toAscii(key)
-    binaryKey = toBinary(asciiKey)
-
-    permutedPlain = toPermut(binaryPlain, plainIP)
-    plainFirstPart = toLeftRight(permutedPlain)
-
-    permutedKey = toPermut(binaryKey, keyP1)
-    global keyPart
-    keyPart = toLeftRight(permutedKey)
-
-    for x in range(16):
-        permut = program(x)
-        plainFirstPart = afterProgram(permut, plainFirstPart)
-
-    finalComb = toCombine(plainFirstPart['right'], plainFirstPart['left'])
-    cipherText = toPermut(finalComb, finalPermut)
-    finalText = toSplit(cipherText, 8)
-
-    for x in range(len(finalText)):
-        finalText[x] = ''.join(finalText[x])
-        finalText[x] = hex(int(finalText[x], 2))[2:]
-
-        if len(finalText[x]) == 1:
-            finalText[x] = '0' + finalText[x]
-
-    finalText = ''.join(finalText)
-    return finalText
-
+	asciiPlain = toAscii(plain)
+	binaryPlain = toBinary(asciiPlain)
+	asciiKey = toAscii(key)
+	binaryKey = toBinary(asciiKey)
+	permutedPlain = toPermut(binaryPlain, plainIP)
+	plainFirstPart = toLeftRight(permutedPlain)
+	permutedKey = toPermut(binaryKey, keyP1)
+	global keyPart
+	keyPart = toLeftRight(permutedKey)
+	for x in range(16):
+	    permut = program(x)
+	    plainFirstPart = afterProgram(permut,plainFirstPart)
+	finalComb = toCombine(plainFirstPart['right'], plainFirstPart['left'])
+	cipherText = toPermut(finalComb, finalPermut)
+	finalText = toSplit(cipherText,8)
+	for x in range(len(finalText)):
+	    finalText[x] = ''.join(finalText[x])
+	    finalText[x]= hex(int(finalText[x],2))[2:]
+	    if len(finalText[x])==1:
+	    	finalText[x]='0'+finalText[x]
+	finalText=''.join(finalText)
+	return finalText
 
 def toDecrypt2(newDecrypt, key):
-    newDecrypt = re.findall('..', newDecrypt)
-    for x in range(len(newDecrypt)):
-        newDecrypt[x] = chr(int(newDecrypt[x], 16))
-
-    binaryNewDecrypt = toBinary(toAscii(newDecrypt))
-    permutedNewDecrypt = toPermut(binaryNewDecrypt, plainIP)
-    newDecryptPart = toLeftRight(permutedNewDecrypt)
-
-    # key = "papamama"
-    asciiKey = toAscii(key)
-    binaryKey = toBinary(asciiKey)
-    permutedKey = toPermut(binaryKey, keyP1)
-
-    global keyPart
-    keyPart = toLeftRight(permutedKey)
-
-    for x in range(16):
-        permut = program(x)
-        newDecryptPart = program2(K[x], newDecryptPart)
-
-    finalComb = toCombine(newDecryptPart['right'], newDecryptPart['left'])
-    cipherText = toPermut(finalComb, finalPermut)
-    finalText = toSplit(cipherText, 8)
-
-    for x in range(len(finalText)):
-        finalText[x] = ''.join(finalText[x])
-        finalText[x] = chr(int(finalText[x], 2))
-
-    finalResult2 = ''.join(finalText)
-    return finalResult2
+	newDecrypt=re.findall('..',newDecrypt)
+	for x in range(len(newDecrypt)):
+		newDecrypt[x]=chr(int(newDecrypt[x],16))
+	binaryNewDecrypt = toBinary(toAscii(newDecrypt))
+	permutedNewDecrypt = toPermut(binaryNewDecrypt, plainIP)
+	newDecryptPart = toLeftRight(permutedNewDecrypt)
+	asciiKey = toAscii(key)
+	binaryKey = toBinary(asciiKey)
+	permutedKey = toPermut(binaryKey, keyP1)
+	global keyPart
+	keyPart = toLeftRight(permutedKey)
+	for x in range(16):
+	    permut = program(x)
+	for x in reversed(range(16)):
+	    newDecryptPart = program2(K[x], newDecryptPart)
+	finalComb = toCombine(newDecryptPart['right'], newDecryptPart['left'])
+	cipherText = toPermut(finalComb, finalPermut)
+	finalText = toSplit(cipherText,8)
+	for x in range(len(finalText)):
+	    finalText[x] = ''.join(finalText[x])
+	    finalText[x]= chr(int(finalText[x],2))
+	finalResult2 = ''.join(finalText)
+	return finalResult2
