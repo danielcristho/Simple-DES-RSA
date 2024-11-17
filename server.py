@@ -5,7 +5,7 @@ import re
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serverRunning = True
 ip = str(socket.gethostbyname(socket.gethostname()))
-port = 1212
+port = 2024
 
 clients = {}
 clientPublicKeys = {}

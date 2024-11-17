@@ -5,7 +5,7 @@ import random
 import string
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-port = 1212
+port = 2024
 
 uname = input("Masukkan username: ")
 ip = '127.0.1.1'
@@ -56,9 +56,9 @@ def receiveMsg(sock):
                 sessionKey = msg
                 print("Session Key", msg) #ini session key
             elif '!!' in msg:
-                if (uname == "alice"):
-                    letters = string.ascii_lowercase
-                    sessionKey = ''.join(random.choice(letters) for i in range(8))
+                # if (uname == "alice"):
+                letters = string.ascii_lowercase
+                sessionKey = ''.join(random.choice(letters) for i in range(8))
                 msg = msg.replace('!!(', '')
                 msg = msg.replace(',', '')
                 sep = ' '
