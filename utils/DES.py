@@ -175,7 +175,6 @@ def toLeftRight(pure):
 		right.append(pure[x])
 	return {'left':left, 'right':right}
 
-
 def toShift(pure, k):
 	shifted = []
 	k = int(k)
@@ -297,50 +296,50 @@ def toDecrypt(plain, keyClient):
 	return temp2
 
 def toEncrypt2(plain, key):
-	asciiPlain = toAscii(plain)
-	binaryPlain = toBinary(asciiPlain)
-	asciiKey = toAscii(key)
-	binaryKey = toBinary(asciiKey)
-	permutedPlain = toPermut(binaryPlain, plainIP)
-	plainFirstPart = toLeftRight(permutedPlain)
-	permutedKey = toPermut(binaryKey, keyP1)
-	global keyPart
-	keyPart = toLeftRight(permutedKey)
-	for x in range(16):
-	    permut = program(x)
-	    plainFirstPart = afterProgram(permut,plainFirstPart)
-	finalComb = toCombine(plainFirstPart['right'], plainFirstPart['left'])
-	cipherText = toPermut(finalComb, finalPermut)
-	finalText = toSplit(cipherText,8)
-	for x in range(len(finalText)):
-	    finalText[x] = ''.join(finalText[x])
-	    finalText[x]= hex(int(finalText[x],2))[2:]
-	    if len(finalText[x])==1:
-	    	finalText[x]='0'+finalText[x]
-	finalText=''.join(finalText)
-	return finalText
+    asciiPlain = toAscii(plain)
+    binaryPlain = toBinary(asciiPlain)
+    asciiKey = toAscii(key)
+    binaryKey = toBinary(asciiKey)
+    permutedPlain = toPermut(binaryPlain, plainIP)
+    plainFirstPart = toLeftRight(permutedPlain)
+    permutedKey = toPermut(binaryKey, keyP1)
+    global keyPart
+    keyPart = toLeftRight(permutedKey)
+    for x in range(16):
+        permut = program(x)
+        plainFirstPart = afterProgram(permut, plainFirstPart)
+    finalComb = toCombine(plainFirstPart['right'], plainFirstPart['left'])
+    cipherText = toPermut(finalComb, finalPermut)
+    finalText = toSplit(cipherText, 8)
+    for x in range(len(finalText)):
+        finalText[x] = ''.join(finalText[x])
+        finalText[x] = hex(int(finalText[x], 2))[2:]
+        if len(finalText[x]) == 1:
+            finalText[x] = '0' + finalText[x]
+    finalText = ''.join(finalText)
+    return finalText
 
 def toDecrypt2(newDecrypt, key):
-	newDecrypt=re.findall('..',newDecrypt)
-	for x in range(len(newDecrypt)):
-		newDecrypt[x]=chr(int(newDecrypt[x],16))
-	binaryNewDecrypt = toBinary(toAscii(newDecrypt))
-	permutedNewDecrypt = toPermut(binaryNewDecrypt, plainIP)
-	newDecryptPart = toLeftRight(permutedNewDecrypt)
-	asciiKey = toAscii(key)
-	binaryKey = toBinary(asciiKey)
-	permutedKey = toPermut(binaryKey, keyP1)
-	global keyPart
-	keyPart = toLeftRight(permutedKey)
-	for x in range(16):
-	    permut = program(x)
-	for x in reversed(range(16)):
-	    newDecryptPart = program2(K[x], newDecryptPart)
-	finalComb = toCombine(newDecryptPart['right'], newDecryptPart['left'])
-	cipherText = toPermut(finalComb, finalPermut)
-	finalText = toSplit(cipherText,8)
-	for x in range(len(finalText)):
-	    finalText[x] = ''.join(finalText[x])
-	    finalText[x]= chr(int(finalText[x],2))
-	finalResult2 = ''.join(finalText)
-	return finalResult2
+    newDecrypt = re.findall('..', newDecrypt)
+    for x in range(len(newDecrypt)):
+        newDecrypt[x] = chr(int(newDecrypt[x], 16))
+    binaryNewDecrypt = toBinary(toAscii(newDecrypt))
+    permutedNewDecrypt = toPermut(binaryNewDecrypt, plainIP)
+    newDecryptPart = toLeftRight(permutedNewDecrypt)
+    asciiKey = toAscii(key)
+    binaryKey = toBinary(asciiKey)
+    permutedKey = toPermut(binaryKey, keyP1)
+    global keyPart
+    keyPart = toLeftRight(permutedKey)
+    for x in range(16):
+        permut = program(x)
+    for x in reversed(range(16)):
+        newDecryptPart = program2(K[x], newDecryptPart)
+    finalComb = toCombine(newDecryptPart['right'], newDecryptPart['left'])
+    cipherText = toPermut(finalComb, finalPermut)
+    finalText = toSplit(cipherText, 8)
+    for x in range(len(finalText)):
+        finalText[x] = ''.join(finalText[x])
+        finalText[x] = chr(int(finalText[x], 2))
+    finalResult2 = ''.join(finalText)
+    return finalResult2
